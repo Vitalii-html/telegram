@@ -6,60 +6,130 @@
   <title>База каналів</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Анімації */
+    /* Анімація появи */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .fade-in {
-      animation: fadeIn 0.6s ease-in-out forwards;
+    .fade-in { animation: fadeIn 0.8s ease-in-out forwards; }
+
+    /* Фонові кулі */
+    .bg-ball {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.45;
+      animation: float 8s ease-in-out infinite;
+      transition: transform 0.3s ease-out;
+      pointer-events: none;
     }
-    .card-hover:hover {
-      transform: translateY(-5px);
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-40px) translateX(20px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+    .bg-ball:nth-child(1) { width: 220px; height: 220px; background: #60a5fa; top: 10%; left: 5%; animation-duration: 9s; }
+    .bg-ball:nth-child(2) { width: 180px; height: 180px; background: #a78bfa; bottom: 15%; right: 10%; animation-duration: 11s; }
+    .bg-ball:nth-child(3) { width: 150px; height: 150px; background: #34d399; top: 55%; left: 20%; animation-duration: 7s; }
+
+    /* Кнопки */
+    .btn-anim {
+      position: relative;
+      overflow: hidden;
       transition: all 0.3s ease;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .btn-anim:hover { transform: scale(1.07) translateY(-2px); box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5); }
+    .btn-anim:active { transform: scale(0.95) translateY(1px); }
+    .btn-anim::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 200%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: all 0.5s ease;
+    }
+    .btn-anim:hover::after { left: 100%; }
+
+    /* Анімації для картки */
+    .card {
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    /* Плаваюче меню мобільне */
+    .mobile-nav { display: none; }
+    @media (max-width: 640px) {
+      .desktop-nav { display: none; }
+      .mobile-nav { display: flex; }
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="relative min-h-screen bg-gradient-to-br from-blue-200 via-white to-purple-200 text-gray-900 overflow-hidden">
+
+  <!-- Фонові кулі -->
+  <div class="bg-ball"></div>
+  <div class="bg-ball"></div>
+  <div class="bg-ball"></div>
 
   <!-- Хедер -->
-  <header class="bg-blue-600 text-white py-5 shadow-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
-      <h1 class="text-2xl md:text-3xl font-bold">Менеджер каналів</h1>
-      <nav>
-        <a href="mycontact.html" class="px-4 py-2 bg-white text-blue-600 rounded-xl shadow hover:bg-gray-100 transition">
+  <header class="backdrop-blur-lg bg-white/30 border-b border-white/20 sticky top-0 z-40 shadow-md desktop-nav">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center py-4 gap-3">
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">Менеджер каналів</h1>
+      <div class="flex gap-3">
+        <a href="mycontact.html" class="btn-anim px-5 py-2 rounded-xl bg-gradient-to-r from-purple-500 via-blue-500 to-blue-600 text-white font-medium shadow-md">
           Контакти
         </a>
-      </nav>
+      </div>
     </div>
   </header>
 
   <!-- Контент -->
-  <main class="max-w-6xl mx-auto p-6">
-    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6 fade-in">Список каналів</h2>
+  <main class="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 z-10">
+    <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800 mb-8 fade-in text-center">✨ Список каналів</h2>
 
-    <!-- Список каналів -->
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- Картка -->
-      <a href="channel.html" class="block bg-white p-6 rounded-2xl shadow-md card-hover fade-in">
-        <h3 class="text-lg md:text-xl font-bold text-blue-600 mb-2">Тестовий канал</h3>
-        <p class="text-gray-600">Підписників: 5 000</p>
-        <p class="text-gray-600">Тематика: Бізнес / Telegram</p>
-        <p class="text-gray-600 text-sm mt-2">Власник: <span class="font-medium">@test_owner</span></p>
-        <div class="mt-4">
-          <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Детальніше →</span>
-        </div>
+    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Одна картка з анімацією при наведенні -->
+      <a href="channel.html" class="card backdrop-blur-xl bg-white/30 border border-white/20 p-6 rounded-3xl shadow-lg fade-in">
+        <h3 class="text-xl font-bold text-blue-700 mb-3">Тестовий канал</h3>
+        <p class="text-gray-700 text-sm mb-1">📊 Підписників: <span class="font-medium">5 000</span></p>
+        <p class="text-gray-700 text-sm mb-1">📂 Тематика: <span class="font-medium">Бізнес / Telegram</span></p>
+        <p class="text-gray-700 text-sm mb-4">👤 Власник: <span class="font-medium">@test_owner</span></p>
+        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Детальніше →</span>
       </a>
     </div>
   </main>
 
   <!-- Футер -->
-  <footer class="bg-gray-100 py-6 mt-10">
-    <div class="max-w-6xl mx-auto text-center text-gray-600 text-sm">
-      © 2025 Менеджер каналів. Всі права захищені.
-    </div>
+  <footer class="backdrop-blur-lg bg-white/30 border-t border-white/20 py-6 mt-12 z-10 relative desktop-nav text-center text-gray-600 text-sm">
+    © 2025 Менеджер каналів. Всі права захищені.
   </footer>
 
+  <!-- Мобільне меню -->
+  <nav class="mobile-nav fixed bottom-5 left-0 right-0 px-6 z-50 justify-between">
+    <a href="mycontact.html" class="btn-anim flex-1 mx-1 py-3 rounded-2xl bg-gradient-to-r from-purple-500 via-blue-500 to-blue-600 text-white font-medium text-center shadow-lg backdrop-blur-xl">
+      Контакти
+    </a>
+    <a href="index.html" class="btn-anim flex-1 mx-1 py-3 rounded-2xl bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white font-medium text-center shadow-lg backdrop-blur-xl">
+      Назад
+    </a>
+  </nav>
+
+  <!-- Рух фонових куль за курсором -->
+  <script>
+    const balls = document.querySelectorAll('.bg-ball');
+    document.addEventListener('mousemove', (e) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * 100;
+      const y = (e.clientY / innerHeight - 0.5) * 100;
+
+      balls.forEach((ball, i) => {
+        const speed = (i + 1) * 0.15;
+        ball.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+    });
+  </script>
 </body>
 </html>
